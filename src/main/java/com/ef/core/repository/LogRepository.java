@@ -33,7 +33,7 @@ public class LogRepository implements Repository<Log>{
         String query = "select count(l.ip) as count, l.ip from wallet_hub.logs as l " +
                 "where request_date between ? and ? " +
                 "group by l.ip " +
-                "having count(l.ip) > ?";
+                "having count(l.ip) >= ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
 

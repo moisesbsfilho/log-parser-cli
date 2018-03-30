@@ -23,7 +23,7 @@ public abstract class ParserHelper {
             default:
                 System.out.println("Invalid duration. Please check the options passing the parameter --help.");
         }
-        return endDate;
+        return endDate.minusSeconds(1);
     }
 
     public static List<ThresholdSearch> getThresholdSearchesFromLogMap(Map<Log, Integer> map, LocalDateTime startDate, LocalDateTime endDate, Integer threshold){
