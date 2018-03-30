@@ -11,6 +11,7 @@ public class Parser {
     public static void main(String[] args) {
 
         LOGGER.debug(">>>>>> Starting ParcerCli command line" );
+        System.out.println("Starting process parameters...");
         ParserCli.start();
 
         if (args.length < 1) {

@@ -30,7 +30,7 @@ public class LogRepository implements Repository<Log>{
         Builder logBuilder = newBuilder();
         Map<Log, Integer> map = new HashMap<>();
 
-        String query = "select count(l.ip) as count, l.ip from logs as l " +
+        String query = "select count(l.ip) as count, l.ip from wallet_hub.logs as l " +
                 "where request_date between ? and ? " +
                 "group by l.ip " +
                 "having count(l.ip) > ?";
@@ -64,7 +64,7 @@ public class LogRepository implements Repository<Log>{
     @Override
     public void saveAll(List<Log> list) {
 
-        String query ="insert into logs (ip, status_code, http_method, user_agent, request_date) " +
+        String query ="insert into wallet_hub.logs (ip, status_code, http_method, user_agent, request_date) " +
                 "values (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){

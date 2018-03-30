@@ -1,19 +1,27 @@
 package com.ef.cli;
 
-import com.ef.cli.helper.PrintOptionsHelper;
+import com.ef.cli.helper.ParserHelper;
 import com.ef.cli.option.ParserOptions;
 import com.ef.cli.parser.CommandLineParser;
 import com.ef.cli.parser.DefaultParse;
+import com.ef.cli.printer.OptionsPrinter;
+import com.ef.cli.printer.ThresholdResultsPrinter;
 import com.ef.core.business.LogBusiness;
+import com.ef.core.business.LogFileBusiness;
+import com.ef.core.business.ThresholdSearchBusiness;
 import com.ef.core.loader.LogFileLoader;
 import com.ef.core.model.Duration;
+import com.ef.core.model.Log;
+import com.ef.core.model.ThresholdSearch;
 import com.ef.core.repository.LogRepository;
-import com.ef.core.business.LogFileBusiness;
+import com.ef.core.repository.ThresholdSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 public class ParserCli {
 
@@ -62,11 +70,10 @@ public class ParserCli {
         if (cmd.hasOption("--help")) {
 
             LOGGER.debug("Help option passed as parameter to commandline");
-            PrintOptionsHelper printHelper = new PrintOptionsHelper();
-            printHelper.printHelper("Parser", options);
+            OptionsPrinter optionsPrinter = new OptionsPrinter("Parser", options);
+            optionsPrinter.print();
 
         } else if (cmd.hasOption("--accesslog")) {
-
             LOGGER.debug("Access log option passed as parameter to commandline");
             String filePath = String.valueOf(cmd.getValue("--accesslog"));
             new LogFileBusiness(new LogFileLoader(), filePath, new LogRepository()).load("");
@@ -76,11 +83,19 @@ public class ParserCli {
                 && cmd.hasOption("--threshold")) {
 
             LOGGER.debug("StartDate, duration and threshold option passed as parameter to commandline");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm:ss");
-            LocalDateTime startDate = LocalDateTime.parse(cmd.getValue("--startDate"), formatter);
+
             Duration duration = Duration.valueOf(cmd.getValue("--duration").toUpperCase());
+            LocalDateTime startDate = LocalDateTime.parse(cmd.getValue("--startDate"), DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm:ss"));
+            LocalDateTime endDate = ParserHelper.getEndDateByDuration(startDate, duration);
             Integer threshold = Integer.parseInt(cmd.getValue("--threshold"));
-            new LogBusiness(new LogRepository()).findByDateAndThreshold(startDate, duration, threshold);
+
+            Map<Log, Integer> logMap = new LogBusiness(new LogRepository()).findByDateAndThreshold(startDate, endDate, threshold);
+            List<ThresholdSearch> thresholdSearches = ParserHelper.getThresholdSearchesFromLogMap(logMap, startDate, endDate, threshold);
+
+            new ThresholdSearchBusiness(new ThresholdSearchRepository()).saveAll(thresholdSearches);
+
+            ThresholdResultsPrinter thresholdResultsPrinter = new ThresholdResultsPrinter(thresholdSearches, threshold);
+            thresholdResultsPrinter.print();
 
         } else {
             System.out.println("No options found. Please check the options passing the parameter --help.");

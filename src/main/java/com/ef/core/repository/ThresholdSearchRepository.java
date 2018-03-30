@@ -29,7 +29,7 @@ public class ThresholdSearchRepository implements Repository<ThresholdSearch>{
     @Override
     public void saveAll(List<ThresholdSearch> list) {
 
-        String query ="insert into threshold_searches (threshold_actual, ip, start_date, end_date, comment) " +
+        String query ="insert into wallet_hub.threshold_searches (threshold_actual, ip, start_date, end_date, comment) " +
                 "values (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
