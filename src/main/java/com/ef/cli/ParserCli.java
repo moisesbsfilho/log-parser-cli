@@ -64,25 +64,33 @@ public class ParserCli {
     }
 
     public static void parse(String[] args) {
+        Boolean validOption = false;
         CommandLineParser parser = new DefaultParse();
         CommandLine cmd = parser.parse(options, args);
 
         if (cmd.hasOption("--help")) {
 
             LOGGER.debug("Help option passed as parameter to commandline");
+            validOption = true;
             OptionsPrinter optionsPrinter = new OptionsPrinter("Parser", options);
             optionsPrinter.print();
 
-        } else if (cmd.hasOption("--accesslog")) {
+        }
+
+        if (cmd.hasOption("--accesslog")) {
             LOGGER.debug("Access log option passed as parameter to commandline");
+            validOption = true;
             String filePath = String.valueOf(cmd.getValue("--accesslog"));
             new LogFileBusiness(new LogFileLoader(), filePath, new LogRepository()).load("");
 
-        } else if (cmd.hasOption("--startDate")
+        }
+
+        if (cmd.hasOption("--startDate")
                 && cmd.hasOption("--duration")
                 && cmd.hasOption("--threshold")) {
 
             LOGGER.debug("StartDate, duration and threshold option passed as parameter to commandline");
+            validOption = true;
 
             Duration duration = Duration.valueOf(cmd.getValue("--duration").toUpperCase());
             LocalDateTime startDate = LocalDateTime.parse(cmd.getValue("--startDate"), DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm:ss"));
@@ -97,7 +105,9 @@ public class ParserCli {
             ThresholdResultsPrinter thresholdResultsPrinter = new ThresholdResultsPrinter(thresholdSearches, threshold);
             thresholdResultsPrinter.print();
 
-        } else {
+        }
+
+        if(!validOption){
             System.out.println("No options found. Please check the options passing the parameter --help.");
         }
 
