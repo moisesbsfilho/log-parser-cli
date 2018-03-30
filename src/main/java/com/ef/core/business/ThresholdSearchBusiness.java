@@ -19,6 +19,7 @@ public class ThresholdSearchBusiness {
     }
 
     public Boolean saveAll(List<ThresholdSearch> thresholdSearches){
+        LOGGER.debug("Call repository to save list");
         new ThresholdSearchRepository().saveAll(thresholdSearches);
         return true;
 
