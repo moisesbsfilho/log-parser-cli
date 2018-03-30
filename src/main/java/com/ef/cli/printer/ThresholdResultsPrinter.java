@@ -26,5 +26,6 @@ public class ThresholdResultsPrinter implements Printer<ThresholdSearch>{
         System.out.printf("\t%-20s %s\n", "Ip:", "Total threshold:");
         list.stream()
                 .forEach(thresholdSearch -> System.out.printf("\t%-20s %s\n", thresholdSearch.getIp(), thresholdSearch.getThresholdActual()));
+        System.out.printf("\n");
     }
 }

@@ -27,6 +27,7 @@ public class OptionsPrinter implements Printer<Options>{
         Map<String, String> optionsMap = options.getOptions().orElseThrow(() -> new IllegalStateException("Expected options not found"));
         optionsMap.entrySet().stream()
                 .forEach(map -> System.out.printf("\t%-20s %s\n", map.getKey(), map.getValue()));
+        System.out.printf("\n");
     }
 
 }
