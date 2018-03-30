@@ -67,7 +67,7 @@ public class LogRepository implements Repository<Log>{
         String query ="insert into logs (ip, status_code, http_method, user_agent, request_date) " +
                 "values (?, ?, ?, ?, ?)";
 
-        try (final PreparedStatement preparedStatement = connection.prepareStatement(query)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
 
             connection.setAutoCommit(false);
 
@@ -78,7 +78,6 @@ public class LogRepository implements Repository<Log>{
                     preparedStatement.setString(3, log.getHttpMethod());
                     preparedStatement.setString(4, log.getUserAgent());
                     preparedStatement.setTimestamp(5, Timestamp.valueOf(log.getRequestDate()));
-                    System.out.println(preparedStatement);
                     preparedStatement.addBatch();
                 } catch (SQLException e) {
                     e.printStackTrace();
