@@ -20,10 +20,11 @@ public class CommandLine {
         return options.hasOption(option) && parametersMap.entrySet().stream().anyMatch(map -> map.getKey().equals(option));
     }
 
-    public Object getValue(String option) {
+    public String getValue(String option) {
         return parametersMap.entrySet().stream()
                 .filter(map -> map.getKey().equals(option))
                 .map(Map.Entry::getValue)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Expected parameter value not found"));
     }
 }
