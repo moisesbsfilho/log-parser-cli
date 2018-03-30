@@ -4,3 +4,6 @@
 
 #Ignoring target folder
 target/*
+
+#Ignoring log folder
+log/*
