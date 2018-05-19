@@ -4,8 +4,8 @@
 This is project is part of test from Wallet Hub for Java programmer role. Powered by Java 8.
 
   - Command Line to interpret the follow commands:
-    -- Load data from database;
-    -- Filter records by threshold and date;
+    - Load data from database;
+    - Filter records by threshold and date;
 
 ### Stacks Used
 
