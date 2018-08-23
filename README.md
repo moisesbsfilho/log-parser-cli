@@ -1,7 +1,7 @@
 # Parser Command Line
 
 
-This is project is part of test from Wallet Hub for Java programmer role. Powered by Java 8.
+This project is part of test from Wallet Hub for Java programmer role. Powered by Java 8.
 
   - Command Line to interpret the follow commands:
     - Load data from database;
